@@ -39,18 +39,7 @@ class AddProductState {
         productId: productId);
   }
 
-  AddProductState setDataProduct(Product product) {
-    return AddProductState._(
-        product: product,
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        productId: productId,
-        status: status);
-  }
-
-  AddProductState setProductId(int productId) {
+  AddProductState updateProduct(int productId) {
     return AddProductState._(
         product: product,
         title: title,
@@ -70,4 +59,8 @@ class AddProductState {
         price: price,
         productId: productId);
   }
+}
+
+class ErrorAddProduct extends AddProductState {
+  ErrorAddProduct.init() : super.init();
 }

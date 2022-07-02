@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 part of 'product_cubit.dart';
 
 @immutable
@@ -50,4 +52,7 @@ class ProductLoaded extends ProductState {
   }
 }
 
-class ProductError extends ProductState {}
+class ProductError extends ProductState {
+  List<Product> list;
+  ProductError._({this.list = const []});
+}

@@ -3,24 +3,30 @@ import 'package:app_rest_api/helpers/api_helper.dart';
 import 'package:app_rest_api/helpers/shared_pref.dart';
 import 'package:app_rest_api/models/user.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
-  void login({required String email, required String password}) async {
+  static final TextEditingController name = TextEditingController();
+  static final TextEditingController email = TextEditingController();
+  static final TextEditingController password = TextEditingController();
+
+  void login() async {
     try {
       emit(AuthLoading());
       var header = {'Accept': 'application/json'};
       var url = Uri.parse(ApiHelper.baseUrl + ApiHelper.login);
       var request = await http.post(url, headers: header, body: {
-        'email': email,
-        'password': password,
+        'email': email.text,
+        'password': password.text,
       });
 
       var response = jsonDecode(request.body);
@@ -37,10 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void register(
-      {required String name,
-      required String email,
-      required String password}) async {
+  void register() async {
     try {
       emit(AuthLoading());
       var header = {
@@ -48,14 +51,14 @@ class AuthCubit extends Cubit<AuthState> {
       };
       var url = Uri.parse(ApiHelper.baseUrl + ApiHelper.register);
       var request = await http.post(url, headers: header, body: {
-        'name': name,
-        'email': email,
-        'password': password,
+        'name': name.text,
+        'email': email.text,
+        'password': password.text,
       });
 
       var response = jsonDecode(request.body);
       var token = response['token'];
-      SharedPref().saveToken(token);
+      await SharedPref().saveToken(token);
       var user = response['data'];
       emit(AuthSuccess(User.fromJson(user)));
     } catch (e) {
@@ -72,7 +75,7 @@ class AuthCubit extends Cubit<AuthState> {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token'
       };
-      var url = Uri.parse(ApiHelper.baseUrl + ApiHelper.register);
+      var url = Uri.parse(ApiHelper.baseUrl + ApiHelper.logout);
       var request = await http.post(
         url,
         headers: header,
