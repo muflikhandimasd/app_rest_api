@@ -1,3 +1,4 @@
+import 'package:app_rest_api/models/product.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
