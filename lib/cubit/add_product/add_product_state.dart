@@ -9,10 +9,10 @@ class AddProductState {
   final TextEditingController image;
   final TextEditingController price;
   final int productId;
-  final Product product;
+  final Product? product;
 
   AddProductState._({
-    required this.product,
+    this.product,
     this.productId = 0,
     this.status = ProductAddStatus.ready,
     required this.title,
@@ -23,7 +23,6 @@ class AddProductState {
 
   AddProductState.init()
       : this._(
-            product: Product(),
             title: TextEditingController(),
             description: TextEditingController(),
             image: TextEditingController(),
@@ -59,8 +58,4 @@ class AddProductState {
         price: price,
         productId: productId);
   }
-}
-
-class ErrorAddProduct extends AddProductState {
-  ErrorAddProduct.init() : super.init();
 }
